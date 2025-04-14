@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
-
+declare module 'express' {
+  export interface Request {
+    userId?: string
+  }
+}
 
 export const authenticateJWT = async (
   req: Request,
@@ -11,7 +15,7 @@ export const authenticateJWT = async (
   const token = req.header('Authorization')?.split(' ')[1]
 
   if (!token) {
-     return res.status(401).json({ message: 'Access denied. No token provided.' })
+     res.status(401).json({ message: 'Access denied. No token provided.' })
   }
 
   try {
@@ -23,6 +27,6 @@ export const authenticateJWT = async (
 
     next()
   } catch {
-    return res.status(400).json({ message: 'Invalid token.' })
+    res.status(400).json({ message: 'Invalid token.' })
   }
 }
