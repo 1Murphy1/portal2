@@ -11,7 +11,7 @@ export const authenticateJWT = async (
   const token = req.header('Authorization')?.split(' ')[1]
 
   if (!token) {
-    res.status(401).json({ message: 'Access denied. No token provided.' })
+     return res.status(401).json({ message: 'Access denied. No token provided.' })
   }
 
   try {
@@ -23,6 +23,6 @@ export const authenticateJWT = async (
 
     next()
   } catch {
-    res.status(400).json({ message: 'Invalid token.' })
+    return res.status(400).json({ message: 'Invalid token.' })
   }
 }
