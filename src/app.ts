@@ -9,9 +9,6 @@ import path from 'path'
 import uploadRoutes from './routes/uploadRoutes'
 import { favoriteRoutes } from './routes/favoriteRoutes'
 
-
-
-
 dotenv.config()
 const PORT = process.env.PORT || 3000
 

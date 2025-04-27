@@ -1,4 +1,4 @@
-import { CallbackError, model, Model, Schema,Types } from 'mongoose'
+import { CallbackError, model, Model, Schema, Types } from 'mongoose'
 import bcrypt from 'bcrypt'
 
 enum Role {
@@ -44,7 +44,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     enum: ['teacher', 'student'],
     required: true,
   },
-  favorites: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+  favorites: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
 })
 
 userSchema.pre('save', async function (next) {

@@ -4,8 +4,8 @@ import { CourseModel } from '../models/course'
 
 const addToFavorites = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.userId 
-    const { courseId } = req.body 
+    const userId = req.userId
+    const { courseId } = req.body
     if (!courseId) {
       res.status(400).json({ message: 'Course ID is required' })
       return
@@ -39,10 +39,13 @@ const addToFavorites = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const removeFromFavorites = async (req: Request, res: Response): Promise<void> => {
+const removeFromFavorites = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const userId = req.userId
-    const { courseId } = req.body 
+    const { courseId } = req.body
 
     if (!courseId) {
       res.status(400).json({ message: 'Course ID is required' })
@@ -62,7 +65,7 @@ const removeFromFavorites = async (req: Request, res: Response): Promise<void> =
       return
     }
 
-    user.favorites.splice(index, 1) 
+    user.favorites.splice(index, 1)
     await user.save()
 
     res.status(200).json({ message: 'Course removed from favorites' })

@@ -72,26 +72,25 @@ const getCourseById = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-
-
 const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.file) {
       res.status(400).json({
         status: 'fail',
         message: 'Необходимо загрузить изображение',
-      });
-      return;
+      })
+      return
     }
 
-    const { title, description, price, category, level, published, tags } = req.body;
+    const { title, description, price, category, level, published, tags } =
+      req.body
 
     if (!title || !price || !category) {
       res.status(400).json({
         status: 'fail',
         message: 'Поля title, price и category обязательны',
-      });
-      return;
+      })
+      return
     }
 
     const newCourse = new CourseModel({
@@ -102,18 +101,17 @@ const createCourse = async (req: Request, res: Response): Promise<void> => {
       level,
       published: published ?? false,
       image: req.file.filename,
-      author: req.userId, 
+      author: req.userId,
       tags: tags ? (Array.isArray(tags) ? tags : [tags]) : [],
-    });
+    })
 
-    await newCourse.save();
+    await newCourse.save()
 
-    res.status(201).json(newCourse);
+    res.status(201).json(newCourse)
   } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
+    res.status(400).json({ error: (error as Error).message })
   }
-};
-
+}
 
 const updateCourse = async (req: Request, res: Response): Promise<void> => {
   try {
