@@ -10,6 +10,7 @@ const getCourses = async (req: Request, res: Response): Promise<void> => {
       search = '',
       category,
       level,
+      tag,
       sortBy = 'createdAt',
       order = 'desc',
     } = req.query
@@ -26,6 +27,9 @@ const getCourses = async (req: Request, res: Response): Promise<void> => {
 
     if (level) {
       filters.level = level
+    }
+    if (tag) {
+      filters.tags = tag
     }
 
     const skip = (+page - 1) * +limit
@@ -68,15 +72,48 @@ const getCourseById = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+
+
 const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = new CourseModel({ ...req.body, author: req.userId })
-    await course.save()
-    res.status(201).json(course)
+    if (!req.file) {
+      res.status(400).json({
+        status: 'fail',
+        message: 'Необходимо загрузить изображение',
+      });
+      return;
+    }
+
+    const { title, description, price, category, level, published, tags } = req.body;
+
+    if (!title || !price || !category) {
+      res.status(400).json({
+        status: 'fail',
+        message: 'Поля title, price и category обязательны',
+      });
+      return;
+    }
+
+    const newCourse = new CourseModel({
+      title,
+      description,
+      price,
+      category,
+      level,
+      published: published ?? false,
+      image: req.file.filename,
+      author: req.userId, 
+      tags: tags ? (Array.isArray(tags) ? tags : [tags]) : [],
+    });
+
+    await newCourse.save();
+
+    res.status(201).json(newCourse);
   } catch (error) {
-    res.status(400).json({ error: (error as Error).message })
+    res.status(400).json({ error: (error as Error).message });
   }
-}
+};
+
 
 const updateCourse = async (req: Request, res: Response): Promise<void> => {
   try {

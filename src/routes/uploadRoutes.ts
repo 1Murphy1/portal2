@@ -1,9 +1,9 @@
 import express from 'express'
-import { upload } from '../middlewares/upload'
+import { upload, processImage } from '../middlewares/upload'
 
 const router = express.Router()
 
-router.post('/upload', upload.single('image'), (req, res) => {
+router.post('/upload', upload.single('image'), processImage, (req, res) => {
     if (!req.file) {
       res.status(400).json({ message: 'the file was not uploaded' })
       return

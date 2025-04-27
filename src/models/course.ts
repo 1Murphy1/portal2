@@ -1,23 +1,24 @@
-import { Schema, model, Types } from "mongoose";
-import slugify from "slugify";
+import { Schema, model, Types } from 'mongoose'
+import slugify from 'slugify'
 
 export enum CourseLevel {
-  Beginner = "beginner",
-  Intermediate = "intermediate",
-  Advanced = "advanced",
+  Beginner = 'beginner',
+  Intermediate = 'intermediate',
+  Advanced = 'advanced',
 }
 
 export interface Course {
-  title: string;
-  slug: string;
-  description?: string;
-  price: number;
-  image: string;
-  category: string;
-  level: CourseLevel;
-  published: boolean;
-  author: Types.ObjectId;
-  createdAt: Date;
+  title: string
+  slug: string
+  description?: string
+  price: number
+  image: string
+  category: string
+  level: CourseLevel
+  published: boolean
+  author: Types.ObjectId
+  createdAt: Date
+  tags?: string[]
 }
 
 const courseSchema = new Schema<Course>({
@@ -57,7 +58,7 @@ const courseSchema = new Schema<Course>({
   },
   author: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   createdAt: {
@@ -65,15 +66,18 @@ const courseSchema = new Schema<Course>({
     required: true,
     default: () => new Date(),
   },
-});
+  tags: [
+    {
+      type: String,
+    },
+  ],
+})
 
-courseSchema.pre("validate", function (next) {
-  if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+courseSchema.pre('validate', function (next) {
+  if (this.isModified('title')) {
+    this.slug = slugify(this.title, { lower: true, strict: true })
   }
-  next();
-});
+  next()
+})
 
-export const CourseModel = model<Course>("Course", courseSchema);
-
-
+export const CourseModel = model<Course>('Course', courseSchema)
